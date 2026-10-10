@@ -77,7 +77,7 @@
       {% for s in slots %}
       {% set k = e.checks.get(loop.index0|string) %}
       {% set is_now = loop.index0==slot_idx %}
-      {% set bg = '#fdba74' if (k==2 and is_now) else ('#ffedd5' if k==2 else ('#fef9c3' if is_now else shift_tints.get(s.shift,''))) %}
+      {% set bg = '#fdba74' if (k==2 and is_now) else ('#ffedd5' if k==2 else ('#fef9c3' if is_now else '')) %}
       <td style="{{ 'background:'+bg if bg else '' }}">{% if k %}<span class="circle {{ 'photo' if k==2 else 'normal' }}">○</span>{% endif %}</td>
       {% endfor %}
     </tr>
