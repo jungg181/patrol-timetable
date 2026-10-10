@@ -6,19 +6,18 @@
 {% endblock %}
 {% block wrapclass %}wide{% endblock %}
 {% block body %}
-<div class="shift-banner" style="background:{{ shift.color if shift else '#475569' }}">
-  <div>
-    <div class="small" style="color:#e2e8f0">CURRENT SHIFT</div>
-    <div class="t"><span class="livedot blink"></span>{{ shift.name if shift else '—' }} <span class="small" style="color:#e2e8f0">{{ now.strftime('%A, %b %d') }}</span></div>
-  </div>
-  <div style="margin-left:auto;text-align:right">
-    <div class="clock" id="clock">--:--:--</div>
-    <div class="small" style="color:#e2e8f0">Slot {{ slots[slot_idx].label }} · auto-refresh 60s</div>
-  </div>
-</div>
-
 <div class="grid-dash">
   <div class="card due-now">
+    <div class="shift-head" style="background:{{ shift.color if shift else '#475569' }}">
+      <div>
+        <div class="small" style="color:#e2e8f0">CURRENT SHIFT</div>
+        <div class="t"><span class="livedot blink"></span>{{ shift.name if shift else '—' }}</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div class="clock" id="clock">--:--:--</div>
+        <div class="small" style="color:#e2e8f0">{{ now.strftime('%A, %b %d') }} · Slot {{ slots[slot_idx].label }}</div>
+      </div>
+    </div>
     <h2>Patrols Due Now <span class="muted small">{{ slots[slot_idx].label }} · Shift {{ slots[slot_idx].shift }}</span></h2>
     {% if due %}
       {% for p in due %}
