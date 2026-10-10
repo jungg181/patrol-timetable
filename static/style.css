@@ -113,3 +113,22 @@ tr.dim{opacity:.55}
 .rowflash td{animation:rowflash 1.4s ease}
 .elapsed{font-variant-numeric:tabular-nums;white-space:nowrap}
 #nxbar{transition:width .5s linear}
+
+/* ---- fluid top dashboard: scales with screen size like the timetable ---- */
+.dash-top > *{min-width:0}
+.dash-top .card{padding:clamp(12px,.6rem + 1vw,24px)}
+.dash-top h2{font-size:clamp(1.25rem,1rem + 1.2vw,1.9rem)}
+.dash-top h3{font-size:clamp(1rem,.9rem + .8vw,1.4rem)}
+.due-now h2{font-size:clamp(1.25rem,1rem + 1.2vw,2rem)}
+.due-now .patrol-card{font-size:clamp(1rem,.8rem + 1vw,1.55rem);
+  padding:clamp(10px,.6rem + .8vw,18px) clamp(12px,.7rem + 1vw,20px)}
+.patrol-card .nm{font-size:clamp(1rem,.85rem + .8vw,1.45rem)}
+.qr-box img{width:clamp(120px,80px + 9vw,230px);height:clamp(120px,80px + 9vw,230px)}
+.dash-top .rowline{font-size:clamp(.95rem,.85rem + .5vw,1.2rem)}
+.dash-top .livedot{width:clamp(10px,8px + .5vw,14px);height:clamp(10px,8px + .5vw,14px)}
+
+/* ---- due-now interactivity ---- */
+.patrol-card.clickable:active{transform:scale(.97)}
+@keyframes badge-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+.due-now .badge{display:inline-block;animation:badge-pulse 1.6s ease-in-out infinite}
+#duebar{transition:width .5s linear,background-color .5s}
