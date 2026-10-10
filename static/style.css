@@ -144,3 +144,6 @@ tr.dim{opacity:.55}
 
 /* settings patrol-checks grid: photo report marker is a red circle */
 #check-grid .circle.photo{color:#dc2626;font-weight:800}
+
+/* full timetable: photo report marker is a red circle */
+#ttable .circle.photo{color:#dc2626}
