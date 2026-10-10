@@ -49,6 +49,10 @@ label{display:block;margin:8px 0}
     <button class="btn primary big-btn" id="btn-in" onclick="punch('in')">🟢 CLOCK IN</button>
     <button class="btn big-btn" id="btn-out" onclick="punch('out')" style="background:#fee2e2;color:#991b1b">🔴 CLOCK OUT</button>
     <p class="muted small" style="text-align:center;margin-top:8px">📍 Your location is captured on clock-in/out<br>to show on the staff map. Allow location access when asked.</p>
+    <div class="card" style="margin-top:12px"><div class="rowline" style="border:none;padding:4px">
+      <input type="checkbox" id="live-toggle" checked onchange="toggleLive()" style="width:20px;height:20px">
+      <div class="grow"><b>Live location</b><div class="muted small">Share every minute while clocked in <span id="live-state" class="muted small"></span></div></div>
+    </div></div>
     <div class="card" style="margin-top:12px"><div style="padding:4px">
       <h3 style="margin-top:0">Today's punches</h3>
       <div id="today-list"><div class="muted small">—</div></div>
@@ -81,6 +85,7 @@ async function refreshStatus(){
     document.getElementById('btn-in').disabled = false;
     document.getElementById('btn-in').style.opacity = 1;
   }
+  updateLiveShare(s.clocked_in);
   const pr = await fetch('/api/patrol-mine?email=' + encodeURIComponent(id.email));
   const mine = await pr.json();
   const tdy = new Date().toISOString().slice(0, 10);
@@ -100,6 +105,38 @@ function getPos(){
       function(){ if(!done){done=true;clearTimeout(t);res(null);} },
       {enableHighAccuracy:true, timeout:7000, maximumAge:60000});
   });
+}
+
+// live location sharing: sends GPS every 60s while clocked in and the page is open
+var liveTimer = null;
+function liveWanted(){
+  try { return localStorage.getItem('patrol_live_share') !== 'off'; } catch(e){ return true; }
+}
+async function sendLive(){
+  const id = ident(); if(!id) return;
+  const pos = await getPos();
+  if (pos) {
+    try {
+      await fetch('/api/location', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({email:id.email, lat:pos.lat, lng:pos.lng})});
+    } catch(e){}
+  }
+}
+function updateLiveShare(clockedIn){
+  const want = liveWanted();
+  const tgl = document.getElementById('live-toggle');
+  if (tgl) tgl.checked = want;
+  if (clockedIn && want) {
+    if (!liveTimer) { sendLive(); liveTimer = setInterval(sendLive, 60000); }
+  } else {
+    if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+  }
+  const st = document.getElementById('live-state');
+  if (st) st.textContent = (clockedIn && want && liveTimer) ? '● sharing' : '○ off';
+}
+function toggleLive(){
+  try { localStorage.setItem('patrol_live_share', document.getElementById('live-toggle').checked ? 'on' : 'off'); } catch(e){}
+  refreshStatus();
 }
 
 async function punch(action){
