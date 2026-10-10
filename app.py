@@ -119,6 +119,19 @@ def current_slot_index():
     return 0
 
 
+def lighten(hexcolor, amt=0.82):
+    """Mix a hex color toward white for light background tints."""
+    try:
+        h = (hexcolor or '').lstrip('#')
+        r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    except (ValueError, IndexError):
+        return '#f1f5f9'
+    r = int(r + (255 - r) * amt)
+    g = int(g + (255 - g) * amt)
+    b = int(b + (255 - b) * amt)
+    return '#%02x%02x%02x' % (r, g, b)
+
+
 def shift_for_hour(h):
     def to_min(t):
         hh, mm = t.split(':')
@@ -231,11 +244,13 @@ def dashboard():
                 "ts": (w.get("last_loc_ts") or "")[:16].replace("T", " ")}
                for w in DB.get('workers', [])
                if w.get('last_lat') is not None and w.get('last_lng') is not None]
+    shift_tints = {s['id']: lighten(s.get('color')) for s in DB['shifts']}
     return render_template('dashboard.html', now=now, slot_idx=idx,
                            shift=shift, due=due, nxt=nxt, nxt_list=nxt_list,
                            slots=DB['slots'], equipment=DB['equipment'],
                            shifts=DB['shifts'], counts=slot_counts,
-                           on_patrol=on_patrol_now(), located=located)
+                           on_patrol=on_patrol_now(), located=located,
+                           shift_tints=shift_tints)
 
 
 # ================= QR CODE =================
