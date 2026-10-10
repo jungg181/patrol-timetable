@@ -132,3 +132,12 @@ tr.dim{opacity:.55}
 @keyframes badge-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
 .due-now .badge{display:inline-block;animation:badge-pulse 1.6s ease-in-out infinite}
 #duebar{transition:width .5s linear,background-color .5s}
+
+/* ---- top cards stretch to fill like the timetable ---- */
+.dash-top{align-items:stretch}
+.dash-top .card{margin-bottom:0}
+.dash-right{display:flex;flex-direction:column;gap:16px;min-width:0}
+.dash-right > .grid-half{flex:1}
+.due-now{display:flex;flex-direction:column}
+.fill-col{display:flex;flex-direction:column}
+.dash-top .qr-box{display:flex;flex-direction:column;align-items:center;justify-content:center}
