@@ -1,7 +1,7 @@
 :root{
   --bg:#f1f5f9; --card:#ffffff; --line:#e2e8f0; --ink:#0f172a;
   --muted:#64748b; --blue:#2563eb; --green:#059669; --purple:#7c3aed;
-  --photo:#0284c9; --red:#dc2626;
+  --photo:#0284c9; --red:#dc2626; --gap:10px;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
@@ -15,13 +15,13 @@ a{color:var(--blue)}
 .topbar nav a{padding:8px 14px;border-radius:8px;text-decoration:none;
   color:var(--muted);font-weight:600}
 .topbar nav a.on{background:#eff6ff;color:var(--blue)}
-.wrap{max-width:1280px;margin:0 auto;padding:18px}
+.wrap{max-width:1280px;margin:0 auto;padding:var(--gap)}
 .wrap.wide{max-width:none}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
-  padding:16px;margin-bottom:16px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+  padding:16px;margin-bottom:var(--gap);box-shadow:0 1px 2px rgba(15,23,42,.04)}
 .card h2,.card h3{margin:0 0 10px}
 .muted{color:var(--muted)} .small{font-size:.82rem}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 @media(max-width:900px){.grid2{grid-template-columns:1fr}}
 .btn{display:inline-block;border:1px solid var(--line);background:#fff;
   border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer;
@@ -80,10 +80,10 @@ tr.dim{opacity:.55}
 @keyframes glow-green{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.55)}50%{box-shadow:0 0 0 12px rgba(22,163,74,0)}}
 .glow-green{animation:glow-green 2.2s ease-out infinite}
 /* dashboard: wide due-now panel */
-.grid-dash{display:grid;grid-template-columns:3fr 1fr;gap:16px}
+.grid-dash{display:grid;grid-template-columns:3fr 1fr;gap:var(--gap)}
 @media(max-width:900px){.grid-dash{grid-template-columns:1fr}}
-.grid-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}
-.grid-half{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:var(--gap)}
+.grid-half{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
 @media(max-width:900px){.grid-top,.grid-half{grid-template-columns:1fr}}
 .due-now h2{font-size:1.7rem}
 .due-now .patrol-card{font-size:1.3rem;padding:14px 18px}
@@ -129,9 +129,9 @@ tr.dim{opacity:.55}
 #duebar{transition:width .5s linear,background-color .5s}
 
 /* ---- top cards stretch to fill like the timetable ---- */
-.dash-top{align-items:stretch}
+.dash-top{align-items:stretch;margin-bottom:var(--gap)}
 .dash-top .card{margin-bottom:0}
-.dash-right{display:flex;flex-direction:column;gap:16px;min-width:0}
+.dash-right{display:flex;flex-direction:column;gap:var(--gap);min-width:0}
 .dash-right > .grid-half{flex:1}
 .due-now{display:flex;flex-direction:column}
 .fill-col{display:flex;flex-direction:column}
