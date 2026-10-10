@@ -9,7 +9,7 @@
 <div class="grid-half dash-top">
   <div class="card due-now">
     <h2>Patrols Due Now <span class="muted small">{{ slots[slot_idx].label }} · Shift {{ slots[slot_idx].shift }}</span></h2>
-    <div style="display:flex;align-items:center;gap:10px;margin:2px 0 12px">
+    <div class="due-timer" style="display:flex;align-items:center;gap:10px;margin:2px 0 12px">
       <div class="small" style="white-space:nowrap">Time left <b id="dueleft" style="font-variant-numeric:tabular-nums">--:--</b></div>
       <div style="flex:1;height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden"><div id="duebar" style="height:100%;width:100%;background:#22c55e;border-radius:99px"></div></div>
     </div>
@@ -27,7 +27,7 @@
     <h3 style="margin-top:auto;padding-top:16px">Next Patrol <span class="muted small">{{ slots[nxt].label if nxt is not none else '' }}</span></h3>
     {% if nxt_list %}
       {% for p in nxt_list %}
-      <div class="patrol-card clickable {{ 'photo' if p.kind==2 else '' }}" style="padding:8px 12px" data-eq="{{ p.equipment.id }}">
+      <div class="patrol-card clickable {{ 'photo' if p.kind==2 else '' }}" data-eq="{{ p.equipment.id }}">
         <span class="dot {{ 'solid' if p.kind==2 else 'hollow' }}"></span>
         <span style="font-weight:700">{{ p.equipment.name }}</span>
         {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO REPORT</span>{% endif %}
