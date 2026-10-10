@@ -40,16 +40,16 @@
   <div class="dash-right">
   <div class="card sheen" id="shiftcard" data-nxth="{{ slots[nxt].label.split(':')[0] if nxt is not none else '' }}" style="background:{{ shift.color if shift else '#475569' }};border:none;color:#fff">
     <div style="display:flex;align-items:center;gap:14px">
-      <div style="font-size:clamp(1.25rem,.9rem + 1.5vw,2.2rem);font-weight:800"><span class="livedot blink"></span>{{ shift.name if shift else '—' }}</div>
+      <div style="font-size:clamp(1.25rem,.9rem + 1.5vw,3rem);font-weight:800"><span class="livedot blink"></span>{{ shift.name if shift else '—' }}</div>
       <div class="small" style="color:#e2e8f0">CURRENT SHIFT</div>
-      <div style="color:#e2e8f0;margin-left:auto;font-size:clamp(.9rem,.75rem + .7vw,1.3rem)">{{ now.strftime('%A, %b %d') }}</div>
-      <div class="clock" id="clock" style="font-size:clamp(1.9rem,1.1rem + 3.2vw,3.6rem);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums">--:--:--</div>
+      <div style="color:#e2e8f0;margin-left:auto;font-size:clamp(.9rem,.75rem + .7vw,1.7rem)">{{ now.strftime('%A, %b %d') }}</div>
+      <div class="clock" id="clock" style="font-size:clamp(1.9rem,1.1rem + 3.2vw,5rem);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums">--:--:--</div>
     </div>
     {% if nxt is not none %}
     <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
       <div class="small" style="color:#e2e8f0;white-space:nowrap">Next patrol {{ slots[nxt].label }}</div>
       <div style="flex:1;height:8px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden"><div id="nxbar" style="height:100%;width:0%;background:#fff;border-radius:99px"></div></div>
-      <div id="nxcount" style="font-size:clamp(1rem,.85rem + .7vw,1.5rem);font-weight:800;font-variant-numeric:tabular-nums">--:--</div>
+      <div id="nxcount" style="font-size:clamp(1rem,.85rem + .7vw,1.9rem);font-weight:800;font-variant-numeric:tabular-nums">--:--</div>
     </div>
     {% endif %}
   </div>
@@ -76,8 +76,6 @@
   </div>
   </div>
   </div>
-</div>
-
 </div>
 
 <div class="card" id="tcard" style="overflow-x:auto">
