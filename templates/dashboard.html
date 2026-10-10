@@ -24,7 +24,7 @@
     {% else %}
       <p class="muted">No patrols this hour.</p>
     {% endif %}
-    <h3 style="margin-top:16px">Next Patrol <span class="muted small">{{ slots[nxt].label if nxt is not none else '' }}</span></h3>
+    <h3 style="margin-top:auto;padding-top:16px">Next Patrol <span class="muted small">{{ slots[nxt].label if nxt is not none else '' }}</span></h3>
     {% if nxt_list %}
       {% for p in nxt_list %}
       <div class="patrol-card clickable {{ 'photo' if p.kind==2 else '' }}" style="padding:8px 12px" data-eq="{{ p.equipment.id }}">
@@ -37,7 +37,7 @@
       <p class="muted small">—</p>
     {% endif %}
   </div>
-  <div>
+  <div class="dash-right">
   <div class="card sheen" id="shiftcard" data-nxth="{{ slots[nxt].label.split(':')[0] if nxt is not none else '' }}" style="background:{{ shift.color if shift else '#475569' }};border:none;color:#fff">
     <div style="display:flex;align-items:center;gap:14px">
       <div style="font-size:clamp(1.25rem,.9rem + 1.5vw,2.2rem);font-weight:800"><span class="livedot blink"></span>{{ shift.name if shift else '—' }}</div>
@@ -54,7 +54,7 @@
     {% endif %}
   </div>
   <div class="grid-half">
-  <div class="card {{ 'glow-green' if on_patrol else '' }}">
+  <div class="card fill-col {{ 'glow-green' if on_patrol else '' }}">
     <h2>On Patrol Now</h2>
     {% if on_patrol %}
       {% for p in on_patrol %}
@@ -65,7 +65,7 @@
       </div>
       {% endfor %}
     {% else %}
-      <p class="muted">No one on patrol.</p>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center"><p class="muted">No one on patrol.</p></div>
     {% endif %}
   </div>
   <div class="card qr-box">
