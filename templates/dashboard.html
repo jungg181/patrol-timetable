@@ -10,8 +10,10 @@
   <div>
   <div class="card" style="background:{{ shift.color if shift else '#475569' }};border:none;color:#fff">
     <div class="small" style="color:#e2e8f0">CURRENT SHIFT</div>
-    <div style="font-size:1.7rem;font-weight:800"><span class="livedot blink"></span>{{ shift.name if shift else '—' }}</div>
-    <div class="clock" id="clock" style="font-size:1.7rem">--:--:--</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="font-size:1.7rem;font-weight:800"><span class="livedot blink"></span>{{ shift.name if shift else '—' }}</div>
+      <div class="clock" id="clock" style="font-size:1.7rem;margin-left:auto">--:--:--</div>
+    </div>
     <div class="small" style="color:#e2e8f0">{{ now.strftime('%A, %b %d') }} · Slot {{ slots[slot_idx].label }} · auto-refresh 60s</div>
   </div>
   <div class="card due-now">
