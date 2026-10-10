@@ -78,3 +78,9 @@ tr.dim{opacity:.55}
 .glow{animation:glow-blue 2.2s ease-out infinite}
 @keyframes glow-green{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.55)}50%{box-shadow:0 0 0 12px rgba(22,163,74,0)}}
 .glow-green{animation:glow-green 2.2s ease-out infinite}
+/* dashboard: wide due-now panel */
+.grid-dash{display:grid;grid-template-columns:3fr 1fr;gap:16px}
+@media(max-width:900px){.grid-dash{grid-template-columns:1fr}}
+.due-now h2{font-size:1.7rem}
+.due-now .patrol-card{font-size:1.3rem;padding:14px 18px}
+.due-now .badge{font-size:.85rem}
