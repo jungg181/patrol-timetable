@@ -506,5 +506,26 @@ def api_patrol_punch():
                     'since': last.get('ts') if last else None})
 
 
+@app.route('/api/location', methods=['POST'])
+def api_location():
+    d = request.get_json(force=True) or {}
+    email = (d.get('email') or '').strip().lower()
+    try:
+        lat = float(d.get('lat'))
+        lng = float(d.get('lng'))
+    except (TypeError, ValueError):
+        return jsonify({'ok': False}), 400
+    if not (-90 <= lat <= 90 and -180 <= lng <= 180):
+        return jsonify({'ok': False}), 400
+    for w in DB['workers']:
+        if (w.get('email') or '').strip().lower() == email:
+            w['last_lat'] = lat
+            w['last_lng'] = lng
+            w['last_loc_ts'] = now_iso()
+            save_db()
+            return jsonify({'ok': True})
+    return jsonify({'ok': False, 'error': 'Unknown worker'}), 404
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
