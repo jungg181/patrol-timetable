@@ -82,6 +82,8 @@ tr.dim{opacity:.55}
 /* dashboard: wide due-now panel */
 .grid-dash{display:grid;grid-template-columns:3fr 1fr;gap:16px}
 @media(max-width:900px){.grid-dash{grid-template-columns:1fr}}
+.grid-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}
+@media(max-width:900px){.grid-top{grid-template-columns:1fr}}
 .due-now h2{font-size:1.7rem}
 .due-now .patrol-card{font-size:1.3rem;padding:14px 18px}
 .due-now .badge{font-size:.85rem}
