@@ -36,14 +36,14 @@
 </div>
 
 <div class="card" style="overflow-x:auto">
-  <h2><span class="muted">02</span> Patrol Checks <span class="muted small">click a cell: empty → ○ → <span style="color:#dc2626;font-weight:800">● photo report</span> → empty</span></h2>
+  <h2><span class="muted">02</span> Patrol Checks <span class="muted small">click a cell: empty → <span class="dot hollow"></span> → <span class="dot solid"></span> photo report → empty</span></h2>
   <table class="grid" id="check-grid">
     <tr><th></th>{% for s in slots %}<th>{{ s.label }}</th>{% endfor %}</tr>
     {% for e in equipment %}
     <tr><td style="text-align:left;font-weight:700;white-space:nowrap">{{ e.name }}</td>
       {% for s in slots %}
       {% set k = e.checks.get(loop.index0|string, 0) %}
-      <td class="cell" data-eq="{{ e.id }}" data-slot="{{ loop.index0 }}" data-v="{{ k }}">{% if k %}<span class="circle {{ 'photo' if k==2 else 'normal' }}">{{ '●' if k==2 else '○' }}</span>{% endif %}</td>
+      <td class="cell" data-eq="{{ e.id }}" data-slot="{{ loop.index0 }}" data-v="{{ k }}">{% if k %}<span class="dot {{ 'solid' if k==2 else 'hollow' }}"></span>{% endif %}</td>
       {% endfor %}
     </tr>
     {% endfor %}
@@ -164,7 +164,7 @@ document.querySelectorAll('#check-grid td.cell').forEach(td=>{
       {equipment_id: td.dataset.eq, slot: td.dataset.slot});
     const v = r.value;
     td.dataset.v = v;
-    td.innerHTML = v ? '<span class="circle '+(v==2?'photo':'normal')+'">'+(v==2?'●':'○')+'</span>' : '';
+    td.innerHTML = v ? '<span class="dot '+(v==2?'solid':'hollow')+'"></span>' : '';
   };
 });
 // --- slots ---
