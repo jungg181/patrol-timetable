@@ -134,6 +134,10 @@ tr.dim{opacity:.55}
 .dash-right{display:flex;flex-direction:column;gap:var(--gap);min-width:0}
 .dash-right > .grid-half{flex:1}
 .due-now{display:flex;flex-direction:column}
+/* align all due-now content (titles, timer, card contents) on one left line */
+.due-now{--cpx:clamp(12px,.7rem + 1vw,28px)}
+.due-now .patrol-card{padding-left:var(--cpx);padding-right:var(--cpx)}
+.due-now h2,.due-now h3,.due-now .due-timer{padding-left:var(--cpx)}
 .fill-col{display:flex;flex-direction:column}
 .dash-top .qr-box{display:flex;flex-direction:column;align-items:center;justify-content:center}
 
