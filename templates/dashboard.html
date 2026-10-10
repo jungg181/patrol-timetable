@@ -38,7 +38,7 @@
     {% endif %}
   </div>
   <div class="dash-right">
-  <div class="card sheen" id="shiftcard" data-nxth="{{ slots[nxt].label.split(':')[0] if nxt is not none else '' }}" style="background:{{ shift.color if shift else '#475569' }};border:none;color:#fff">
+  <div class="card" id="shiftcard" data-nxth="{{ slots[nxt].label.split(':')[0] if nxt is not none else '' }}" style="background:{{ shift.color if shift else '#475569' }};border:none;color:#fff">
     <div style="display:flex;align-items:center;gap:14px">
       <div style="font-size:clamp(1.25rem,.9rem + 1.5vw,3rem);font-weight:800"><span class="livedot blink"></span>{{ shift.name if shift else '—' }}</div>
       <div class="small" style="color:#e2e8f0">CURRENT SHIFT</div>
@@ -161,10 +161,13 @@ function tickElapsed(){
   });
 }
 tickElapsed(); setInterval(tickElapsed, 1000);
-// click a due-now card -> jump to that equipment row and flash it
+// click a due-now card -> jump to that equipment row and flash it;
+// hover a due-now card -> highlight the matching timetable row
 document.querySelectorAll('.patrol-card.clickable').forEach(function(card){
+  var row = document.getElementById('eq-' + card.dataset.eq);
+  card.addEventListener('mouseenter', function(){ if(row) row.classList.add('rowhi'); });
+  card.addEventListener('mouseleave', function(){ if(row) row.classList.remove('rowhi'); });
   card.addEventListener('click', function(){
-    var row = document.getElementById('eq-' + card.dataset.eq);
     if(!row) return;
     document.getElementById('tcard').scrollIntoView({behavior:'smooth', block:'center'});
     row.classList.remove('rowflash');
