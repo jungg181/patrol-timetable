@@ -506,6 +506,33 @@ def timecard_export():
 
 # ================= PATROL CLOCK (phone page) =================
 
+@app.after_request
+def add_cors(resp):
+    if request.path.startswith('/api/'):
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        resp.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+        resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return resp
+
+
+@app.route('/api/patrol-schedule')
+def api_patrol_schedule():
+    """Machine-readable patrol timetable for the worker On Site app.
+
+    Always reflects the current Settings (reads the live in-memory DB).
+    CORS open (*) so the worker app can fetch it cross-origin."""
+    patrols = []
+    for i, s in enumerate(DB['slots']):
+        for p in patrols_at(i):
+            patrols.append({
+                'equipment': p['equipment']['name'],
+                'time': s['label'],
+                'shift': s.get('shift', ''),
+                'photo': p['kind'] == 2,
+            })
+    return jsonify({'patrols': patrols,
+                    'slots': [s['label'] for s in DB['slots']]})
+
 @app.route('/patrol-clock')
 def patrol_clock():
     return render_template('patrol_clock.html')
