@@ -8,11 +8,13 @@ import io
 import json
 import uuid
 import csv
+import hashlib
+from functools import wraps
 from datetime import datetime, date
 from zoneinfo import ZoneInfo
 
 from flask import (Flask, render_template, request, redirect, url_for,
-                   jsonify, send_file, abort, flash)
+                   jsonify, send_file, abort, flash, session)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'data.json')
@@ -21,6 +23,21 @@ TZ = ZoneInfo("America/Phoenix")
 
 app = Flask(__name__)
 app.secret_key = 'patrol-board-local-key'
+
+# Password gate for Timecard / Settings pages (SHA-256 of the admin
+# password; override with the ADMIN_PASSWORD_HASH env var to rotate it).
+ADMIN_PASSWORD_HASH = os.environ.get(
+    'ADMIN_PASSWORD_HASH',
+    '3a5d9797c6b9313b4e79eed8c8d369e94eabe3700cf864c625e510ebba02f5b7')
+
+
+def login_required(fn):
+    @wraps(fn)
+    def wrapper(*a, **k):
+        if not session.get('admin'):
+            return redirect(url_for('login', next=request.path))
+        return fn(*a, **k)
+    return wrapper
 
 COLLECTIONS = ['slots', 'equipment', 'shifts', 'workers', 'punches']
 
@@ -222,6 +239,28 @@ def paired_records():
     return rows
 
 
+# ================= PASSWORD GATE =================
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        pw = request.form.get('password') or ''
+        if hashlib.sha256(pw.encode()).hexdigest() == ADMIN_PASSWORD_HASH:
+            session['admin'] = True
+            nxt = request.form.get('next') or request.args.get('next') or url_for('dashboard')
+            if not nxt.startswith('/'):
+                nxt = url_for('dashboard')
+            return redirect(nxt)
+        flash('Wrong password.')
+    return render_template('login.html', next=request.args.get('next', ''))
+
+
+@app.route('/logout')
+def logout():
+    session.pop('admin', None)
+    return redirect(url_for('dashboard'))
+
+
 # ================= DASHBOARD =================
 
 @app.route('/')
@@ -272,6 +311,7 @@ def qr_png():
 # ================= SETTINGS =================
 
 @app.route('/settings')
+@login_required
 def settings():
     return render_template('settings.html', slots=DB['slots'],
                            equipment=DB['equipment'], shifts=DB['shifts'],
@@ -279,6 +319,7 @@ def settings():
 
 
 @app.route('/settings/equipment/save', methods=['POST'])
+@login_required
 def settings_equipment_save():
     data = request.get_json(force=True)
     for item in data.get('equipment', []):
@@ -296,6 +337,7 @@ def settings_equipment_save():
 
 
 @app.route('/settings/equipment/add', methods=['POST'])
+@login_required
 def settings_equipment_add():
     name = (request.form.get('name') or '').strip() or 'New Equipment'
     DB['equipment'].append({"id": new_id(), "name": name, "note": "",
@@ -305,6 +347,7 @@ def settings_equipment_add():
 
 
 @app.route('/settings/equipment/<eid>/delete', methods=['POST'])
+@login_required
 def settings_equipment_delete(eid):
     DB['equipment'] = [e for e in DB['equipment'] if e['id'] != eid]
     save_db()
@@ -312,6 +355,7 @@ def settings_equipment_delete(eid):
 
 
 @app.route('/settings/check', methods=['POST'])
+@login_required
 def settings_check():
     d = request.get_json(force=True)
     e = find('equipment', d.get('equipment_id'))
@@ -329,6 +373,7 @@ def settings_check():
 
 
 @app.route('/settings/slots/save', methods=['POST'])
+@login_required
 def settings_slots_save():
     data = request.get_json(force=True)
     for i, s in enumerate(data.get('slots', [])):
@@ -340,6 +385,7 @@ def settings_slots_save():
 
 
 @app.route('/settings/shifts/save', methods=['POST'])
+@login_required
 def settings_shifts_save():
     data = request.get_json(force=True)
     DB['shifts'] = data.get('shifts', DB['shifts'])
@@ -350,6 +396,7 @@ def settings_shifts_save():
 
 
 @app.route('/settings/workers/add', methods=['POST'])
+@login_required
 def settings_worker_add():
     name = (request.form.get('name') or '').strip() or 'New Worker'
     email = (request.form.get('email') or '').strip()
@@ -360,6 +407,7 @@ def settings_worker_add():
 
 
 @app.route('/settings/workers/<wid>/delete', methods=['POST'])
+@login_required
 def settings_worker_delete(wid):
     DB['workers'] = [w for w in DB['workers'] if w['id'] != wid]
     save_db()
@@ -367,6 +415,7 @@ def settings_worker_delete(wid):
 
 
 @app.route('/settings/workers/save', methods=['POST'])
+@login_required
 def settings_workers_save():
     data = request.get_json(force=True)
     for item in data.get('workers', []):
@@ -381,6 +430,7 @@ def settings_workers_save():
 
 
 @app.route('/settings/reset', methods=['POST'])
+@login_required
 def settings_reset():
     fresh = seed()
     # keep workers, punches, and shift assignment edits
@@ -402,6 +452,7 @@ def data_backup():
 # ================= TIMECARD =================
 
 @app.route('/timecard')
+@login_required
 def timecard():
     workers = sorted(DB['workers'], key=lambda w: w.get('name', ''))
     status = []
@@ -418,6 +469,7 @@ def timecard():
 
 
 @app.route('/timecard/clock', methods=['POST'])
+@login_required
 def timecard_clock():
     d = request.get_json(force=True)
     w = find('workers', d.get('worker_id'))
@@ -438,6 +490,7 @@ def timecard_clock():
 
 
 @app.route('/timecard/export')
+@login_required
 def timecard_export():
     buf = io.StringIO()
     w = csv.writer(buf)
