@@ -5,7 +5,7 @@
 <div class="shift-banner" style="background:{{ shift.color if shift else '#475569' }}">
   <div>
     <div class="small" style="color:#e2e8f0">CURRENT SHIFT</div>
-    <div class="t">{{ shift.name if shift else '—' }} <span class="small" style="color:#e2e8f0">{{ now.strftime('%A, %b %d') }}</span></div>
+    <div class="t"><span class="livedot blink"></span>{{ shift.name if shift else '—' }} <span class="small" style="color:#e2e8f0">{{ now.strftime('%A, %b %d') }}</span></div>
   </div>
   <div style="margin-left:auto;text-align:right">
     <div class="clock" id="clock">--:--:--</div>
@@ -18,7 +18,7 @@
     <h2>Patrols Due Now <span class="muted small">{{ slots[slot_idx].label }} · Shift {{ slots[slot_idx].shift }}</span></h2>
     {% if due %}
       {% for p in due %}
-      <div class="patrol-card {{ 'photo' if p.kind==2 else '' }}">
+      <div class="patrol-card {{ 'photo glow' if p.kind==2 else '' }}">
         <span class="circle {{ 'photo' if p.kind==2 else 'normal' }}">○</span>
         <span class="nm">{{ p.equipment.name }}</span>
         {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO PATROL</span>{% endif %}
@@ -42,13 +42,13 @@
   </div>
 
   <div>
-    <div class="card">
+    <div class="card {{ 'glow-green' if on_patrol else '' }}">
       <h2>On Patrol Now</h2>
       {% if on_patrol %}
         {% for p in on_patrol %}
         <div class="rowline">
           <span style="font-size:1.3rem">👷</span>
-          <div class="grow"><b>{{ p.name }}</b><div class="muted small">{{ p.email }}</div></div>
+          <div class="grow"><b>{{ p.name }}</b></div>
           <span class="muted small">in {{ p.ts[11:16] if p.ts|length>16 else p.ts }}</span>
         </div>
         {% endfor %}
@@ -100,8 +100,9 @@
 <script>
 function tick(){
   const d = new Date();
-  document.getElementById('clock').textContent =
-    String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
+  const p = n => String(n).padStart(2,'0');
+  document.getElementById('clock').innerHTML =
+    p(d.getHours())+'<span class="blink">:</span>'+p(d.getMinutes())+'<span class="blink">:</span>'+p(d.getSeconds());
 }
 tick(); setInterval(tick, 1000);
 setTimeout(function(){ location.reload(); }, 60000);
