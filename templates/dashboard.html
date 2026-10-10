@@ -16,7 +16,7 @@
     {% if due %}
       {% for p in due %}
       <div class="patrol-card clickable {{ 'photo glow' if p.kind==2 else '' }}" data-eq="{{ p.equipment.id }}">
-        <span class="circle {{ 'photo' if p.kind==2 else 'normal' }}">○</span>
+        <span class="circle {{ 'photo' if p.kind==2 else 'normal' }}">{{ '●' if p.kind==2 else '○' }}</span>
         <span class="nm">{{ p.equipment.name }}</span>
         {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO REPORT</span>{% endif %}
       </div>
@@ -28,7 +28,7 @@
     {% if nxt_list %}
       {% for p in nxt_list %}
       <div class="patrol-card clickable {{ 'photo' if p.kind==2 else '' }}" style="padding:8px 12px" data-eq="{{ p.equipment.id }}">
-        <span class="circle {{ 'photo' if p.kind==2 else 'normal' }}">○</span>
+        <span class="circle {{ 'photo' if p.kind==2 else 'normal' }}">{{ '●' if p.kind==2 else '○' }}</span>
         <span style="font-weight:700">{{ p.equipment.name }}</span>
         {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO REPORT</span>{% endif %}
       </div>
@@ -80,7 +80,7 @@
 
 <div class="card" id="tcard" style="overflow-x:auto">
   <h3>Full Timetable</h3>
-  <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo report time · yellow column = current hour · <span style="color:#ef4444;font-weight:700">red line</span> = now · {% for sh in shifts %}<span style="background:{{ shift_tints[sh.id] }};padding:1px 8px;border-radius:4px">{{ sh.name }}</span> {% endfor %}= shift</div>
+  <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="color:#dc2626;font-weight:800">●</span> = photo report · yellow column = current hour · <span style="color:#ef4444;font-weight:700">red line</span> = now · {% for sh in shifts %}<span style="background:{{ shift_tints[sh.id] }};padding:1px 8px;border-radius:4px">{{ sh.name }}</span> {% endfor %}= shift</div>
   <div id="nowline"></div>
   <table class="grid" id="ttable">
     <tr><th>Equipment</th>{% for s in slots %}<th data-h="{{ (7+loop.index0)%24 }}" style="background:{{ '#fef9c3' if loop.index0==slot_idx else shift_tints.get(s.shift,'') }}">{{ s.label }}<br><span class="muted">{{ s.shift }}</span></th>{% endfor %}</tr>
@@ -90,8 +90,8 @@
       {% for s in slots %}
       {% set k = e.checks.get(loop.index0|string) %}
       {% set is_now = loop.index0==slot_idx %}
-      {% set bg = '#fdba74' if (k==2 and is_now) else ('#ffedd5' if k==2 else ('#fef9c3' if is_now else '')) %}
-      <td style="{{ 'background:'+bg if bg else '' }}">{% if k %}<span class="circle {{ 'photo' if k==2 else 'normal' }}">○</span>{% endif %}</td>
+      {% set bg = '#fef9c3' if is_now else '' %}
+      <td style="{{ 'background:'+bg if bg else '' }}">{% if k %}<span class="circle {{ 'photo' if k==2 else 'normal' }}">{{ '●' if k==2 else '○' }}</span>{% endif %}</td>
       {% endfor %}
     </tr>
     {% endfor %}
