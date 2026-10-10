@@ -42,7 +42,7 @@ table.grid th,table.grid td{text-align:center;padding:6px 4px;
 table.grid td.cell{cursor:pointer;user-select:none;min-width:44px;height:38px}
 .circle{font-size:1.5rem;line-height:1;vertical-align:middle}
 .circle.normal{color:var(--ink)}
-.circle.photo{color:#dc2626;font-weight:800;font-size:1.32rem}
+.circle.photo{color:#dc2626;font-weight:800}
 tr.dim{opacity:.55}
 .timeline{display:flex;gap:3px;margin:8px 0}
 .timeline .seg{flex:1;height:34px;border-radius:6px;position:relative;
@@ -143,3 +143,8 @@ tr.dim{opacity:.55}
 .grid tr.rowhi td:last-child{box-shadow:inset -3px 0 0 #0284c7, inset 0 3px 0 #0284c7, inset 0 -3px 0 #0284c7}
 
 
+
+/* company logo centered in the top bar */
+.topbar{position:relative}
+.top-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:40px;width:auto}
+@media(max-width:700px){.top-logo{height:28px}}
