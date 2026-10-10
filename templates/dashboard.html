@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% set nav='dash' %}
 {% block title %}Dashboard · Equipment Patrol Timetable{% endblock %}
+{% block wrapclass %}wide{% endblock %}
 {% block body %}
 <div class="shift-banner" style="background:{{ shift.color if shift else '#475569' }}">
   <div>
@@ -65,21 +66,9 @@
   </div>
 </div>
 
-<div class="card">
-  <h3>24-Hour Timeline</h3>
-  <div class="timeline">
-    {% for s in slots %}
-    {% set sh = shifts|selectattr('id','equalto',s.shift)|first %}
-    <div class="seg {{ 'now' if loop.index0==slot_idx else '' }}" style="background:{{ sh.color if sh else '#94a3b8' }}" title="{{ s.label }} · {{ counts[loop.index0] }} patrols">
-      <small>{{ s.label.replace(':00','') }}</small>
-    </div>
-    {% endfor %}
-  </div>
-  <div class="muted small">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo patrol time · yellow column = current hour</div>
-</div>
-
 <div class="card" style="overflow-x:auto">
   <h3>Full Timetable</h3>
+  <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo patrol time · yellow column = current hour</div>
   <table class="grid">
     <tr><th>Equipment</th>{% for s in slots %}<th style="{{ 'background:#fef9c3' if loop.index0==slot_idx else '' }}">{{ s.label }}<br><span class="muted">{{ s.shift }}</span></th>{% endfor %}</tr>
     {% for e in equipment %}

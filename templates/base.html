@@ -16,7 +16,7 @@
     <a href="{{ url_for('settings') }}" class="{{ 'on' if nav=='settings' else '' }}">Settings</a>
   </nav>
 </div>
-<div class="wrap">
+<div class="wrap {% block wrapclass %}{% endblock %}">
 {% with msgs = get_flashed_messages() %}
 {% if msgs %}<div class="flash ok">{{ msgs[0] }}</div>{% endif %}
 {% endwith %}
