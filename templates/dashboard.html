@@ -23,7 +23,7 @@
       <div class="patrol-card {{ 'photo glow' if p.kind==2 else '' }}">
         <span class="circle {{ 'photo' if p.kind==2 else 'normal' }}">○</span>
         <span class="nm">{{ p.equipment.name }}</span>
-        {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO PATROL</span>{% endif %}
+        {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO REPORT</span>{% endif %}
       </div>
       {% endfor %}
     {% else %}
@@ -35,7 +35,7 @@
       <div class="patrol-card {{ 'photo' if p.kind==2 else '' }}" style="padding:8px 12px">
         <span class="circle {{ 'photo' if p.kind==2 else 'normal' }}">○</span>
         <span style="font-weight:700">{{ p.equipment.name }}</span>
-        {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO</span>{% endif %}
+        {% if p.kind==2 %}<span class="badge" style="background:#e0f2fe;color:#0369a1">PHOTO REPORT</span>{% endif %}
       </div>
       {% endfor %}
     {% else %}
@@ -76,7 +76,7 @@
 
 <div class="card" style="overflow-x:auto">
   <h3>Full Timetable</h3>
-  <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo patrol time · yellow column = current hour</div>
+  <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo report time · yellow column = current hour</div>
   <table class="grid">
     <tr><th>Equipment</th>{% for s in slots %}<th style="{{ 'background:#fef9c3' if loop.index0==slot_idx else '' }}">{{ s.label }}<br><span class="muted">{{ s.shift }}</span></th>{% endfor %}</tr>
     {% for e in equipment %}
