@@ -75,7 +75,7 @@
     </div>
     {% endfor %}
   </div>
-  <div class="muted small">○ = patrol due · <span style="color:#0284c9;font-weight:700">○</span> = photo patrol · outlined = current hour</div>
+  <div class="muted small">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo patrol time · yellow column = current hour</div>
 </div>
 
 <div class="card" style="overflow-x:auto">
@@ -87,7 +87,9 @@
       <td style="text-align:left;font-weight:700;white-space:nowrap">{{ e.name }}{% if e.note %}<div class="muted small">{{ e.note }}</div>{% endif %}</td>
       {% for s in slots %}
       {% set k = e.checks.get(loop.index0|string) %}
-      <td style="{{ 'background:#fef9c3' if loop.index0==slot_idx else '' }}">{% if k %}<span class="circle {{ 'photo' if k==2 else 'normal' }}">○</span>{% endif %}</td>
+      {% set is_now = loop.index0==slot_idx %}
+      {% set bg = '#fdba74' if (k==2 and is_now) else ('#ffedd5' if k==2 else ('#fef9c3' if is_now else '')) %}
+      <td style="{{ 'background:'+bg if bg else '' }}">{% if k %}<span class="circle {{ 'photo' if k==2 else 'normal' }}">○</span>{% endif %}</td>
       {% endfor %}
     </tr>
     {% endfor %}
