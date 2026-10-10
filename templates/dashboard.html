@@ -76,17 +76,17 @@
 
 <div class="card" id="tcard" style="overflow-x:auto">
   <h3>Full Timetable</h3>
-  <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo report time · yellow column = current hour · <span style="color:#ef4444;font-weight:700">red line</span> = now</div>
+  <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="background:#ffedd5;padding:1px 8px;border-radius:4px;font-weight:700">orange cell</span> = photo report time · yellow column = current hour · <span style="color:#ef4444;font-weight:700">red line</span> = now · {% for sh in shifts %}<span style="background:{{ shift_tints[sh.id] }};padding:1px 8px;border-radius:4px">{{ sh.name }}</span> {% endfor %}= shift</div>
   <div id="nowline"></div>
   <table class="grid" id="ttable">
-    <tr><th>Equipment</th>{% for s in slots %}<th data-h="{{ (7+loop.index0)%24 }}" style="{{ 'background:#fef9c3' if loop.index0==slot_idx else '' }}">{{ s.label }}<br><span class="muted">{{ s.shift }}</span></th>{% endfor %}</tr>
+    <tr><th>Equipment</th>{% for s in slots %}<th data-h="{{ (7+loop.index0)%24 }}" style="background:{{ '#fef9c3' if loop.index0==slot_idx else shift_tints.get(s.shift,'') }}">{{ s.label }}<br><span class="muted">{{ s.shift }}</span></th>{% endfor %}</tr>
     {% for e in equipment %}
     <tr class="{{ 'dim' if not e.active else '' }}">
       <td style="text-align:left;font-weight:700;white-space:nowrap">{{ e.name }}{% if e.note %}<div class="muted small">{{ e.note }}</div>{% endif %}</td>
       {% for s in slots %}
       {% set k = e.checks.get(loop.index0|string) %}
       {% set is_now = loop.index0==slot_idx %}
-      {% set bg = '#fdba74' if (k==2 and is_now) else ('#ffedd5' if k==2 else ('#fef9c3' if is_now else '')) %}
+      {% set bg = '#fdba74' if (k==2 and is_now) else ('#ffedd5' if k==2 else ('#fef9c3' if is_now else shift_tints.get(s.shift,''))) %}
       <td style="{{ 'background:'+bg if bg else '' }}">{% if k %}<span class="circle {{ 'photo' if k==2 else 'normal' }}">○</span>{% endif %}</td>
       {% endfor %}
     </tr>
