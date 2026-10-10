@@ -226,11 +226,16 @@ def dashboard():
             nxt, nxt_list = j, pl
             break
     slot_counts = [len(patrols_at(i)) for i in range(24)]
+    located = [{"name": w.get("name", ""),
+                "lat": w["last_lat"], "lng": w["last_lng"],
+                "ts": (w.get("last_loc_ts") or "")[:16].replace("T", " ")}
+               for w in DB.get('workers', [])
+               if w.get('last_lat') is not None and w.get('last_lng') is not None]
     return render_template('dashboard.html', now=now, slot_idx=idx,
                            shift=shift, due=due, nxt=nxt, nxt_list=nxt_list,
                            slots=DB['slots'], equipment=DB['equipment'],
                            shifts=DB['shifts'], counts=slot_counts,
-                           on_patrol=on_patrol_now())
+                           on_patrol=on_patrol_now(), located=located)
 
 
 # ================= QR CODE =================
@@ -475,14 +480,26 @@ def api_patrol_punch():
                           "action": action, "ts": now_iso(),
                           "source": "qr"})
     # auto-register worker by email
-    if not any((w.get('email') or '').strip().lower() == email.lower()
-               for w in DB['workers']):
-        DB['workers'].append({"id": new_id(), "name": name, "email": email,
-                              "shift_id": ""})
-    else:
-        for w in DB['workers']:
-            if (w.get('email') or '').strip().lower() == email.lower() and not w.get('name'):
-                w['name'] = name
+    worker = None
+    for w in DB['workers']:
+        if (w.get('email') or '').strip().lower() == email.lower():
+            worker = w
+            break
+    if worker is None:
+        worker = {"id": new_id(), "name": name, "email": email, "shift_id": ""}
+        DB['workers'].append(worker)
+    elif not worker.get('name'):
+        worker['name'] = name
+    # optional GPS from the phone — shown on the staff map
+    try:
+        lat = float(d.get('lat')) if d.get('lat') is not None else None
+        lng = float(d.get('lng')) if d.get('lng') is not None else None
+    except (TypeError, ValueError):
+        lat = lng = None
+    if lat is not None and lng is not None and -90 <= lat <= 90 and -180 <= lng <= 180:
+        worker['last_lat'] = lat
+        worker['last_lng'] = lng
+        worker['last_loc_ts'] = now_iso()
     save_db()
     clocked_in, last = punch_status(email)
     return jsonify({'ok': True, 'clocked_in': clocked_in,
