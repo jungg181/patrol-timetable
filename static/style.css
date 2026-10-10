@@ -42,7 +42,7 @@ table.grid th,table.grid td{text-align:center;padding:6px 4px;
 table.grid td.cell{cursor:pointer;user-select:none;min-width:44px;height:38px}
 .circle{font-size:1.15rem;line-height:1}
 .circle.normal{color:var(--ink)}
-.circle.photo{color:var(--photo);font-weight:800}
+.circle.photo{color:#dc2626;font-weight:800}
 tr.dim{opacity:.55}
 .timeline{display:flex;gap:3px;margin:8px 0}
 .timeline .seg{flex:1;height:34px;border-radius:6px;position:relative;
@@ -142,8 +142,4 @@ tr.dim{opacity:.55}
 .grid tr.rowhi td:first-child{box-shadow:inset 3px 0 0 #0284c7, inset 0 3px 0 #0284c7, inset 0 -3px 0 #0284c7}
 .grid tr.rowhi td:last-child{box-shadow:inset -3px 0 0 #0284c7, inset 0 3px 0 #0284c7, inset 0 -3px 0 #0284c7}
 
-/* settings patrol-checks grid: photo report marker is a red circle */
-#check-grid .circle.photo{color:#dc2626;font-weight:800}
 
-/* full timetable: photo report marker is a red circle */
-#ttable .circle.photo{color:#dc2626}
