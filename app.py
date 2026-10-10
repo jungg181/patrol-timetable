@@ -429,7 +429,8 @@ def timecard_export():
     w.writerow(['date', 'name', 'email', 'clock_in', 'clock_out', 'hours'])
     for r in paired_records():
         w.writerow([(r['clock_in'] or '')[:10], r['name'], r['email'],
-                    r['clock_in'], r['clock_out'] or '', r['hours'] or ''])
+                    (r['clock_in'] or '')[11:16], (r['clock_out'] or '')[11:16],
+                    r['hours'] or ''])
     data = io.BytesIO(buf.getvalue().encode('utf-8-sig'))
     return send_file(data, mimetype='text/csv', as_attachment=True,
                      download_name='patrol-timecards.csv')
