@@ -9,12 +9,15 @@ import json
 import uuid
 import csv
 from datetime import datetime, date
+from zoneinfo import ZoneInfo
 
 from flask import (Flask, render_template, request, redirect, url_for,
                    jsonify, send_file, abort, flash)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'data.json')
+# Factory local time (user's timezone). All "now" logic uses this.
+TZ = ZoneInfo("America/Phoenix")
 
 app = Flask(__name__)
 app.secret_key = 'patrol-board-local-key'
@@ -27,7 +30,11 @@ def new_id():
 
 
 def now_iso():
-    return datetime.now().isoformat(timespec='seconds')
+    return datetime.now(TZ).replace(tzinfo=None).isoformat(timespec='seconds')
+
+
+def local_now():
+    return datetime.now(TZ).replace(tzinfo=None)
 
 
 def seed():
@@ -105,7 +112,7 @@ def slot_hour(label):
 
 
 def current_slot_index():
-    h = datetime.now().hour
+    h = local_now().hour
     for i, s in enumerate(DB['slots']):
         if slot_hour(s['label']) == h:
             return i
@@ -207,7 +214,7 @@ def paired_records():
 @app.route('/')
 def dashboard():
     idx = current_slot_index()
-    now = datetime.now()
+    now = local_now()
     shift = shift_for_hour(now.hour)
     due = patrols_at(idx)
     # next slot with any patrol
