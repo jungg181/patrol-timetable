@@ -48,6 +48,7 @@ label{display:block;margin:8px 0}
     </div></div>
     <button class="btn primary big-btn" id="btn-in" onclick="punch('in')">🟢 CLOCK IN</button>
     <button class="btn big-btn" id="btn-out" onclick="punch('out')" style="background:#fee2e2;color:#991b1b">🔴 CLOCK OUT</button>
+    <p class="muted small" style="text-align:center;margin-top:8px">📍 Your location is captured on clock-in/out<br>to show on the staff map. Allow location access when asked.</p>
     <div class="card" style="margin-top:12px"><div style="padding:4px">
       <h3 style="margin-top:0">Today's punches</h3>
       <div id="today-list"><div class="muted small">—</div></div>
@@ -89,13 +90,28 @@ async function refreshStatus(){
     : '<div class="muted small">No punches yet today.</div>';
 }
 
+function getPos(){
+  if (!navigator.geolocation) return Promise.resolve(null);
+  return new Promise(function(res){
+    var done = false;
+    var t = setTimeout(function(){ if(!done){done=true;res(null);} }, 8000);
+    navigator.geolocation.getCurrentPosition(
+      function(p){ if(!done){done=true;clearTimeout(t);res({lat:p.coords.latitude, lng:p.coords.longitude});} },
+      function(){ if(!done){done=true;clearTimeout(t);res(null);} },
+      {enableHighAccuracy:true, timeout:7000, maximumAge:60000});
+  });
+}
+
 async function punch(action){
   const id = ident(); if(!id) return;
   const btn = action === 'in' ? document.getElementById('btn-in') : document.getElementById('btn-out');
   btn.disabled = true;
   try {
+    const pos = await getPos();
+    const body = {email:id.email, name:id.name, action:action};
+    if (pos) { body.lat = pos.lat; body.lng = pos.lng; }
     const r = await fetch('/api/patrol-punch', {method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({email:id.email, name:id.name, action:action})});
+      body: JSON.stringify(body)});
     const j = await r.json();
     if (j.ok) { flash(action === 'in' ? '✅ Clocked in at ' + fmtT(j.since) : '✅ Clocked out.', 'ok'); }
     else { flash('⚠️ ' + (j.error || 'Failed.'), 'err'); }
