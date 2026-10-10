@@ -83,7 +83,7 @@
   <div class="muted small" style="margin-bottom:8px">○ = patrol due · <span style="color:#dc2626;font-weight:800">●</span> = photo report · yellow column = current hour · <span style="color:#ef4444;font-weight:700">red line</span> = now · {% for sh in shifts %}<span style="background:{{ shift_tints[sh.id] }};padding:1px 8px;border-radius:4px">{{ sh.name }}</span> {% endfor %}= shift</div>
   <div id="nowline"></div>
   <table class="grid" id="ttable">
-    <tr><th>Equipment</th>{% for s in slots %}<th data-h="{{ (7+loop.index0)%24 }}" style="background:{{ '#fef9c3' if loop.index0==slot_idx else shift_tints.get(s.shift,'') }}">{{ s.label }}<br><span class="muted">{{ s.shift }}</span></th>{% endfor %}</tr>
+    <tr><th>Equipment</th>{% for s in slots %}<th data-h="{{ (7+loop.index0)%24 }}" style="background:{{ shift_tints.get(s.shift,'') }}">{{ s.label }}<br><span class="muted">{{ s.shift }}</span></th>{% endfor %}</tr>
     {% for e in equipment %}
     <tr id="eq-{{ e.id }}" class="{{ 'dim' if not e.active else '' }}">
       <td style="text-align:left;font-weight:700;white-space:nowrap">{{ e.name }}{% if e.note %}<div class="muted small">{{ e.note }}</div>{% endif %}</td>
