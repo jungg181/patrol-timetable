@@ -16,7 +16,7 @@ a{color:var(--blue)}
   color:var(--muted);font-weight:600}
 .topbar nav a.on{background:#eff6ff;color:var(--blue)}
 .wrap{max-width:1280px;margin:0 auto;padding:18px}
-.wrap.wide{max-width:1720px}
+.wrap.wide{max-width:none}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
   padding:16px;margin-bottom:16px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
 .card h2,.card h3{margin:0 0 10px}
@@ -116,15 +116,15 @@ tr.dim{opacity:.55}
 
 /* ---- fluid top dashboard: scales with screen size like the timetable ---- */
 .dash-top > *{min-width:0}
-.dash-top .card{padding:clamp(12px,.6rem + 1vw,24px)}
-.dash-top h2{font-size:clamp(1.25rem,1rem + 1.2vw,1.9rem)}
-.dash-top h3{font-size:clamp(1rem,.9rem + .8vw,1.4rem)}
-.due-now h2{font-size:clamp(1.25rem,1rem + 1.2vw,2rem)}
-.due-now .patrol-card{font-size:clamp(1rem,.8rem + 1vw,1.55rem);
-  padding:clamp(10px,.6rem + .8vw,18px) clamp(12px,.7rem + 1vw,20px)}
-.patrol-card .nm{font-size:clamp(1rem,.85rem + .8vw,1.45rem)}
-.qr-box img{width:clamp(120px,80px + 9vw,230px);height:clamp(120px,80px + 9vw,230px)}
-.dash-top .rowline{font-size:clamp(.95rem,.85rem + .5vw,1.2rem)}
+.dash-top .card{padding:clamp(12px,.6rem + 1vw,32px)}
+.dash-top h2{font-size:clamp(1.25rem,1rem + 1.2vw,2.6rem)}
+.dash-top h3{font-size:clamp(1rem,.9rem + .8vw,1.8rem)}
+.due-now h2{font-size:clamp(1.25rem,1rem + 1.2vw,2.8rem)}
+.due-now .patrol-card{font-size:clamp(1rem,.8rem + 1vw,2rem);
+  padding:clamp(10px,.6rem + .8vw,24px) clamp(12px,.7rem + 1vw,28px)}
+.patrol-card .nm{font-size:clamp(1rem,.85rem + .8vw,1.9rem)}
+.qr-box img{width:clamp(120px,80px + 9vw,340px);height:clamp(120px,80px + 9vw,340px)}
+.dash-top .rowline{font-size:clamp(.95rem,.85rem + .5vw,1.5rem)}
 .dash-top .livedot{width:clamp(10px,8px + .5vw,14px);height:clamp(10px,8px + .5vw,14px)}
 
 /* ---- due-now interactivity ---- */
