@@ -506,6 +506,14 @@ def timecard_export():
 
 # ================= PATROL CLOCK (phone page) =================
 
+@app.route('/sw.js')
+def service_worker():
+    resp = app.send_static_file('sw.js')
+    resp.headers['Cache-Control'] = 'no-cache'
+    resp.headers['Service-Worker-Allowed'] = '/'
+    return resp
+
+
 @app.after_request
 def add_cors(resp):
     if request.path.startswith('/api/'):
