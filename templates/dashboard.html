@@ -6,6 +6,10 @@
 {% endblock %}
 {% block wrapclass %}wide{% endblock %}
 {% block body %}
+<div id="offlineBadge" hidden style="margin-bottom:10px;background:#fef3c7;color:#92400e;
+  border:1px solid #fcd34d;border-radius:10px;padding:8px 16px;font-weight:700">
+  📡 Offline — showing the last saved board
+</div>
 <div class="grid-half dash-top">
   <div class="card due-now">
     <h2>Patrols Due Now <span class="muted small">{{ slots[slot_idx].label }} · Shift {{ slots[slot_idx].shift }}</span></h2>
@@ -197,6 +201,14 @@ document.querySelectorAll('.patrol-card.clickable').forEach(function(card){
   });
 })();
 setTimeout(function(){ location.reload(); }, 60000);
+// offline indicator
+(function(){
+  var b = document.getElementById('offlineBadge');
+  function upd(){ b.hidden = navigator.onLine; }
+  window.addEventListener('online', upd);
+  window.addEventListener('offline', upd);
+  upd();
+})();
 // sweeping "now" line across the timetable, like a clock hand
 function moveNowLine(){
   var line = document.getElementById('nowline');
@@ -213,6 +225,12 @@ function moveNowLine(){
 moveNowLine(); setInterval(moveNowLine, 30000);
 {% if located %}
 (function(){
+  var el = document.getElementById('staffmap');
+  if (!navigator.onLine) {
+    el.innerHTML = '<div style="height:100%;display:flex;align-items:center;' +
+      'justify-content:center;color:#64748b;font-weight:600">Map needs connection</div>';
+    return;
+  }
   var pts = {{ located|tojson }};
   var map = L.map('staffmap');
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
